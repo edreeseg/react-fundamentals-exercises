@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Replica App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js'></script>
+</head>
+<body>
+    <div id='app'></div>
+    
+    <script type='text/babel'>
+
+        const FriendsList = (props) => {
+            return (
+                <ul>
+                    {props.friends.map(x => <li key={x}>{x}</li>)}
+                </ul>
+            );
+        }
+
+        const FriendsInput = (props) => {
+            return (
+                <div>
+                    <input type='text'
+                    placeholder='New User' 
+                    onChange={props.onChange}
+                    value={props.input}/>
+                    <button onClick={props.onAddFriend}>Submit</button>
+                </div>
+            );
+        }
+
+        class App extends React.Component{
+            constructor(props){
+                super(props);
+                this.state = {
+                    friends: ['Tyler', 'Sarah', 'Dan'],
+                    input: '',
+                }
+                this.handleAddFriend = this.handleAddFriend.bind(this);
+                this.handleChange = this.handleChange.bind(this);
+            }
+            handleAddFriend(){
+                this.setState((prevState) => ({
+                    friends: prevState.friends.concat([this.state.input]),
+                    input: '',
+                }));
+            }
+            handleChange(e){
+                this.setState({
+                    input: e.target.value,
+                });
+            }
+            render(){
+                return (
+                    <div>
+                        <h1>Users</h1>
+                        <FriendsList friends={this.state.friends}/>
+                        <FriendsInput input={this.state.input}
+                        onChange={this.handleChange}
+                        onAddFriend={this.handleAddFriend} />
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(
+            <App />,
+            document.querySelector('#app')
+        );
+    </script>
+</body>
+</html>
